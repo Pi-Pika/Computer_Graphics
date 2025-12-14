@@ -1,24 +1,32 @@
-// Press '+' to bigger, '-' to smaller, 'r' to reset
-#include <GL/freeglut.h>
+#include <GL/glut.h>
+#include<math.h>
 #include <iostream>
-float scaleFactor = 1.0f; // Initial scale
+
+float scaleFactor = 1.0f;
+
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-// Apply scaling at center
-    glTranslatef(400.0f, 300.0f, 0.0f); // Move to window center first
+    glTranslatef(400.0f, 300.0f, 0.0f);
     glScalef(scaleFactor, scaleFactor, 1.0f);
-// Draw a square (centered at origin after translate)
-    glBegin(GL_POLYGON);
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(-50, -50);
-    glVertex2f(50, -50);
-    glVertex2f(50, 50);
-    glVertex2f(-50, 50);
+
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glVertex2f(0, 0);
+
+    float radius = 50.0f;
+    int segments = 100;
+    for(int i = 0; i <= segments; i++)
+    {
+        float angle = 2.0f * 3.14159f * i / segments;
+        glVertex2f(radius * cos(angle), radius * sin(angle));
+    }
+
     glEnd();
     glutSwapBuffers();
 }
+
 void keyboard(unsigned char key, int x, int y)
 {
     if (key == '+')
@@ -39,12 +47,13 @@ void keyboard(unsigned char key, int x, int y)
     }
     glutPostRedisplay();
 }
+
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("2D Scaling - Bigger/Smaller");
+    glutCreateWindow("2D Scaling - Circle");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
